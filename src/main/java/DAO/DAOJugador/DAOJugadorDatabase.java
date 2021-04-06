@@ -36,7 +36,7 @@ public class DAOJugadorDatabase implements DAOJugador{
         List<Videojuego> videojuegos = new ArrayList<>();
         try {
             Statement statement = DBConnection.getIstance().createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from videojuegos where nombre in (SELECT videojuego from juego_pertence WHERE jugador = '"+jugador.getNombre()+"')");
+            ResultSet resultSet = statement.executeQuery("select * from videojuegos where nombre in (SELECT videojuego from juego_pertenece WHERE jugador = '"+jugador.getNombre()+"')");
             while (resultSet.next()){
                 String nombre = resultSet.getString("nombre");
                 int precio = resultSet.getInt("precio");
@@ -59,7 +59,7 @@ public class DAOJugadorDatabase implements DAOJugador{
             statement.execute("insert into jugadores values('"+jugador.getNombre()+"','"+jugador.getEmail()+"','"+jugador.getContraseña()+"')");
         }catch (SQLException exception){
             if(exception.getErrorCode() == 1062){
-                System.err.println("Ya existe un profesor con ese nombre");
+                System.err.println("Ya existe un jugador con ese nombre");
             }
             else {
                 System.err.println(exception.getMessage());
@@ -79,6 +79,22 @@ public class DAOJugadorDatabase implements DAOJugador{
             statement.execute("UPDATE `jugadores` SET `saldo` = "+saldo+"+saldo WHERE `jugadores`.`nombre` = '"+jugador.getNombre()+"'");
         }catch (SQLException throwables){
             throwables.printStackTrace();
+        }
+    }
+
+    @Override
+    public void comprarJuego(Jugador jugador, Videojuego videojuego) {
+        try {
+            Statement statement = DBConnection.getIstance().createStatement();
+            statement.execute("insert into juego_pertenece values('"+videojuego.getNombre()+"','"+jugador.getNombre()+"',now())");
+            statement.execute("UPDATE `jugadores` SET `saldo` = saldo-"+videojuego.getPrecio()+" WHERE `jugadores`.`nombre` = '"+jugador.getNombre()+"'");
+        }catch (SQLException exception){
+            if(exception.getErrorCode() == 1062){
+                System.err.println("Ya tienes ese juego");
+            }
+            else {
+                System.err.println(exception.getMessage());
+            }
         }
     }
 }

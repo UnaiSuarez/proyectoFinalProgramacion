@@ -10,12 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DAOVideojuegosDatabase implements DAOVideojuegos{
-    public List<Videojuego> videojuegos;
     @Override
     public List<Videojuego> getVideojuegos() {
-        if (videojuegos== null){
-            videojuegos = new ArrayList<>();
-        }
+        List<Videojuego> videojuegos = new ArrayList<>();
         try {
             Statement statement = DBConnection.getIstance().createStatement();
             ResultSet resultSet = statement.executeQuery("select * from videojuegos");

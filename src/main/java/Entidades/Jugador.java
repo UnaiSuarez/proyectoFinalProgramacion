@@ -46,7 +46,11 @@ public class Jugador implements Serializable {
     }
 
     public void setSaldo(int saldo) {
-        this.saldo = saldo;
+        this.saldo = this.saldo + saldo;
+    }
+
+    public void compra(int precio){
+        this.saldo = this.saldo - precio;
     }
 
     @Override

@@ -47,4 +47,9 @@ public class DAOJugadorSerializable extends DAOSerializable implements DAOJugado
     public void actualizarSaldo(Jugador jugador, int saldo) {
 
     }
+
+    @Override
+    public void comprarJuego(Jugador jugador, Videojuego videojuego) {
+
+    }
 }

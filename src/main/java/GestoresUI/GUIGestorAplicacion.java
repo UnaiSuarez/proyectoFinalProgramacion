@@ -5,6 +5,7 @@ import Entidades.Jugador;
 import Entidades.Videojuego;
 
 import javax.swing.*;
+import java.util.List;
 
 public class GUIGestorAplicacion extends JFrame {
     private Jugador jugador;
@@ -21,14 +22,13 @@ public class GUIGestorAplicacion extends JFrame {
     private JPanel PanelAjustes;
     private JButton AgregarSaldoButton;
     private JTextField AgregarSaldoInput;
+    private JButton BotonEfectuarCompra;
 
     public GUIGestorAplicacion(Jugador jugador){
         this.jugador = jugador;
         PanelCompra.setVisible(false);
         PanelMisJuegos.setVisible(false);
         PanelAjustes.setVisible(false);
-        setListaJuegosTodos();
-        setListaMisJuegos();
         setSize(500,500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(PanelPrincipal);
@@ -41,6 +41,7 @@ public class GUIGestorAplicacion extends JFrame {
                 PanelCompra.setVisible(false);
             }
             else PanelCompra.setVisible(true);
+            setListaJuegosTodos();
         });
         MisJuegosBoton.addActionListener(e -> {
             PanelCompra.setVisible(false);
@@ -49,6 +50,7 @@ public class GUIGestorAplicacion extends JFrame {
                 PanelMisJuegos.setVisible(false);
             }
             else PanelMisJuegos.setVisible(true);
+            setListaMisJuegos();
         });
 
         AjustesBoton.addActionListener(e -> {
@@ -64,12 +66,46 @@ public class GUIGestorAplicacion extends JFrame {
         AgregarSaldoButton.addActionListener(e -> {
             añadirSaldo();
         });
+        BotonEfectuarCompra.addActionListener(e -> {
+            Videojuego videojuegoComprar = DAOFactory.getInstance().getDaoVideojuegos().getVideojuegos().get(ListaJuegosTodos.getSelectedIndex());
+            if (jugador.getSaldo() < videojuegoComprar.getPrecio()){
+                JOptionPane.showMessageDialog(this,"Su saldo es insuficiente :(","ALERTA",JOptionPane.PLAIN_MESSAGE);
+                System.out.println("saldo insuficiente");
+            }else {
+                List<Videojuego> videojuegos = DAOFactory.getInstance().getDaoJugador().getVideojuegosFromjugador(jugador);
+                if (videojuegos.size() == 0){
+                    DAOFactory.getInstance().getDaoJugador().comprarJuego(jugador,videojuegoComprar);
+                    System.out.println("juego comprado");
+                    jugador.compra(videojuegoComprar.getPrecio());
+                    SaldoInpout.setText("saldo: "+ jugador.getSaldo());
+                }else {
+                    for (int i = 0; i < videojuegos.size(); i++) {
+                        if (videojuegos.get(i).getNombre().equals(videojuegoComprar.getNombre())){
+                            JOptionPane.showMessageDialog(this,"Ya tiene comprado este juego :(","ALERTA",JOptionPane.PLAIN_MESSAGE);
+                            System.out.println("ya tienes este juego");
+                        }else {
+                            if (i == videojuegos.size()){
+                                DAOFactory.getInstance().getDaoJugador().comprarJuego(jugador,videojuegoComprar);
+                                System.out.println("juego comprado");
+                                jugador.compra(videojuegoComprar.getPrecio());
+                                SaldoInpout.setText("saldo: "+ jugador.getSaldo());
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
     private void añadirSaldo(){
             jugador.setSaldo(Integer.parseInt(AgregarSaldoInput.getText()));
             DAOFactory.getInstance().getDaoJugador().actualizarSaldo(jugador,Integer.parseInt(AgregarSaldoInput.getText()));
-        SaldoInpout.setText("saldo: "+ jugador.getSaldo());
+            SaldoInpout.setText("saldo: "+ jugador.getSaldo());
     }
+
+    private void  comprarJuego(){
+
+    }
+
     public void setListaJuegosTodos(){ListaJuegosTodos.setListData(DAOFactory.getInstance().getDaoVideojuegos().getVideojuegos().toArray());}
     public void setListaMisJuegos(){ListaMisJuegos.setListData(DAOFactory.getInstance().getDaoJugador().getVideojuegosFromjugador(jugador).toArray());}
 }
