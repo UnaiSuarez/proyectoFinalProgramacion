@@ -52,4 +52,14 @@ public class DAOJugadorSerializable extends DAOSerializable implements DAOJugado
     public void comprarJuego(Jugador jugador, Videojuego videojuego) {
 
     }
+
+    @Override
+    public List<Jugador> getAmigosFromjugador(Jugador jugador) {
+        return null;
+    }
+
+    @Override
+    public void añadirAmigo(Jugador jugador, Jugador jugador2) {
+
+    }
 }

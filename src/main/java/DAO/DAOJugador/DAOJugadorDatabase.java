@@ -1,5 +1,6 @@
 package DAO.DAOJugador;
 
+import DAO.DAOFactory;
 import Entidades.Jugador;
 import Entidades.Videojuego;
 import db.DBConnection;
@@ -91,6 +92,41 @@ public class DAOJugadorDatabase implements DAOJugador{
         }catch (SQLException exception){
             if(exception.getErrorCode() == 1062){
                 System.err.println("Ya tienes ese juego");
+            }
+            else {
+                System.err.println(exception.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public List<Jugador> getAmigosFromjugador(Jugador jugador) {
+        List<Jugador> jugadores = new ArrayList<>();
+        try {
+            Statement statement = DBConnection.getIstance().createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from jugadores where nombre in (SELECT jugador1 from seguidores WHERE jugador1 = '"+jugador.getNombre()+"')");
+            while (resultSet.next()){
+                String nombre = resultSet.getString("nombre");
+                String email = resultSet.getString("email");
+                String password = resultSet.getString("contraseña");
+                int saldo = resultSet.getInt("saldo");
+                jugadores.add(new Jugador(nombre,email,password,saldo));
+            }
+        }catch (SQLException throwables){
+            throwables.printStackTrace();
+        }
+        return jugadores;
+    }
+
+    @Override
+    public void añadirAmigo(Jugador jugador, Jugador jugador2) {
+        try {
+            Statement statement = DBConnection.getIstance().createStatement();
+            statement.execute("insert into seguidores values('"+jugador.getNombre()+"',"+jugador2.getNombre()+"')");
+            statement.execute("insert into seguidores values('"+jugador2.getNombre()+"',"+jugador.getNombre()+"')");
+        }catch (SQLException exception){
+            if(exception.getErrorCode() == 1062){
+                System.err.println("Ya sois amigos");
             }
             else {
                 System.err.println(exception.getMessage());

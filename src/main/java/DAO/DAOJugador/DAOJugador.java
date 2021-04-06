@@ -14,4 +14,6 @@ public interface DAOJugador {
     public void delete(int posicion);
     public void actualizarSaldo(Jugador jugador, int saldo);
     public void comprarJuego(Jugador jugador, Videojuego videojuego);
+    public List<Jugador> getAmigosFromjugador(Jugador jugador);
+    public void añadirAmigo(Jugador jugador, Jugador jugador2);
 }
