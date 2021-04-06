@@ -2,6 +2,7 @@ package DAO.DAOJugador;
 
 import DAO.DAOSerializable;
 import Entidades.Jugador;
+import Entidades.Videojuego;
 
 
 import java.util.ArrayList;
@@ -26,6 +27,11 @@ public class DAOJugadorSerializable extends DAOSerializable implements DAOJugado
         return jugadores;
     }
 
+    @Override
+    public List<Videojuego> getVideojuegosFromjugador(Jugador jugador) {
+        return null;
+    }
+
     public void add(Jugador jugador){
         jugadores.add(jugador);
         this.save(jugadores);
@@ -35,5 +41,10 @@ public class DAOJugadorSerializable extends DAOSerializable implements DAOJugado
     public void delete(int posicion){
         jugadores.remove(posicion);
         this.save(jugadores);
+    }
+
+    @Override
+    public void actualizarSaldo(Jugador jugador, int saldo) {
+
     }
 }

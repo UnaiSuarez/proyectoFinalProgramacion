@@ -1,6 +1,7 @@
 package DAO.DAOJugador;
 
 import Entidades.Jugador;
+import Entidades.Videojuego;
 import db.DBConnection;
 
 import java.sql.ResultSet;
@@ -10,12 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DAOJugadorDatabase implements DAOJugador{
-    public List<Jugador> jugadores;
+
     @Override
     public List<Jugador> getJugador() {
-        if (jugadores == null){
-            jugadores = new ArrayList<>();
-        }
+        List<Jugador> jugadores = new ArrayList<>();
         try {
             Statement statement = DBConnection.getIstance().createStatement();
             ResultSet resultSet = statement.executeQuery("select * from jugadores");
@@ -23,12 +22,34 @@ public class DAOJugadorDatabase implements DAOJugador{
                 String nombre = resultSet.getString("nombre");
                 String email = resultSet.getString("email");
                 String password = resultSet.getString("contraseña");
-                jugadores.add(new Jugador(nombre,email,password));
+                int saldo = resultSet.getInt("saldo");
+                jugadores.add(new Jugador(nombre,email,password,saldo));
             }
         }catch (SQLException throwables){
             throwables.printStackTrace();
         }
         return jugadores;
+    }
+
+    @Override
+    public List<Videojuego> getVideojuegosFromjugador(Jugador jugador) {
+        List<Videojuego> videojuegos = new ArrayList<>();
+        try {
+            Statement statement = DBConnection.getIstance().createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from videojuegos where nombre in (SELECT videojuego from juego_pertence WHERE jugador = '"+jugador.getNombre()+"')");
+            while (resultSet.next()){
+                String nombre = resultSet.getString("nombre");
+                int precio = resultSet.getInt("precio");
+                String descripcon = resultSet.getString("descripcion");
+                int rating = resultSet.getInt("rating");
+                String desarrollador = resultSet.getString("desarrollador");
+                Boolean fullRemote = resultSet.getBoolean("fullRemote");
+                videojuegos.add(new Videojuego(nombre,precio,descripcon,rating,desarrollador,fullRemote));
+            }
+        }catch (SQLException throwables){
+            throwables.printStackTrace();
+        }
+        return videojuegos;
     }
 
     @Override
@@ -49,5 +70,15 @@ public class DAOJugadorDatabase implements DAOJugador{
     @Override
     public void delete(int posicion) {
 
+    }
+
+    @Override
+    public void actualizarSaldo(Jugador jugador, int saldo) {
+        try {
+            Statement statement = DBConnection.getIstance().createStatement();
+            statement.execute("UPDATE `jugadores` SET `saldo` = "+saldo+"+saldo WHERE `jugadores`.`nombre` = '"+jugador.getNombre()+"'");
+        }catch (SQLException throwables){
+            throwables.printStackTrace();
+        }
     }
 }
