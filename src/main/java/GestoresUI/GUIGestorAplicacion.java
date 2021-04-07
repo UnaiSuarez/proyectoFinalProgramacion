@@ -53,6 +53,7 @@ public class GUIGestorAplicacion extends JFrame {
     private JPanel PanelMuestraInformacionJuego;
     private JLabel LabelFecha;
     private JButton cerrarSesionButton;
+    private JLabel LabelInformacion;
     Image image = null;
     URL url;
 
@@ -171,7 +172,6 @@ public class GUIGestorAplicacion extends JFrame {
                     Videojuego videojuego = (Videojuego) ListaMisJuegos.getSelectedValue();
                     cambiarDescripcion(videojuego);
                     LabelFecha.setText(String.valueOf(DAOFactory.getInstance().getDaoJugador().fechaAdquisicion(jugador,videojuego)));
-
             }
 
             @Override
@@ -202,6 +202,7 @@ public class GUIGestorAplicacion extends JFrame {
                     Videojuego videojuego = (Videojuego) ListaJuegosTodos.getSelectedValue();
                     LabelFecha.setText("");
                     cambiarDescripcion(videojuego);
+
             }
 
             @Override

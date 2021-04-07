@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DAOVideojuegosDatabase implements DAOVideojuegos{
@@ -17,7 +18,7 @@ public class DAOVideojuegosDatabase implements DAOVideojuegos{
             Statement statement = DBConnection.getIstance().createStatement();
             ResultSet resultSet = statement.executeQuery("select * from videojuegos");
             while (resultSet.next()){
-                videojuegos.add(crearJuego(resultSet));
+                videojuegos.add(crearVideojuego(resultSet));
             }
         }catch (SQLException throwables){
             throwables.printStackTrace();
@@ -42,7 +43,7 @@ public class DAOVideojuegosDatabase implements DAOVideojuegos{
             Statement statement = DBConnection.getIstance().createStatement();
             ResultSet resultSet = statement.executeQuery("select * from videojuegos where nombre like'%"+nombre+"%'");
             while (resultSet.next()) {
-                videojuegos.add(crearJuego(resultSet));
+                videojuegos.add(crearVideojuego(resultSet));
             }
         } catch (SQLException exception) {
             if (exception.getErrorCode() == 1062) {
@@ -73,15 +74,30 @@ public class DAOVideojuegosDatabase implements DAOVideojuegos{
         return url;
     }
 
-    public Videojuego crearJuego(ResultSet resultSet){
+    @Override
+    public Videojuego crearVideojuego(ResultSet resultSet) {
         try {
+            int espacio = 0;
+            String descripcion = "<html><body>";
             String nombre = resultSet.getString("nombre");
             int precio = resultSet.getInt("precio");
             String descripcon = resultSet.getString("descripcion");
+            String[] palabras = descripcon.split(" ");
+            for (int i = 0; i < palabras.length; i++) {
+                if (espacio % 10 == 0){
+                    espacio = espacio + 1;
+                    descripcion += palabras[i] + "<br>";
+                }
+                else{
+                    espacio = espacio + 1;
+                    descripcion += palabras[i] +" ";
+                }
+            }
+            descripcion = descripcion + "</body></html>";
             int rating = resultSet.getInt("rating");
             String desarrollador = resultSet.getString("desarrollador");
-            Boolean fullRemote = resultSet.getBoolean("fullRemote");
-            return new Videojuego(nombre,precio,descripcon,rating,desarrollador,fullRemote);
+            boolean fullRemote = resultSet.getBoolean("fullRemote");
+            return new Videojuego(nombre,precio,descripcion,rating,desarrollador,fullRemote);
         }catch (SQLException exception) {
             if (exception.getErrorCode() == 1062) {
                 System.err.println("no hay juegos");
@@ -91,4 +107,5 @@ public class DAOVideojuegosDatabase implements DAOVideojuegos{
         }
         return null;
     }
+
 }

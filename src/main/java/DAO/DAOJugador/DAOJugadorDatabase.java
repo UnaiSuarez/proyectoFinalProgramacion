@@ -40,13 +40,7 @@ public class DAOJugadorDatabase implements DAOJugador {
             Statement statement = DBConnection.getIstance().createStatement();
             ResultSet resultSet = statement.executeQuery("select * from videojuegos where nombre in (SELECT videojuego from juego_pertenece WHERE jugador = '" + jugador.getNombre() + "')");
             while (resultSet.next()) {
-                String nombre = resultSet.getString("nombre");
-                int precio = resultSet.getInt("precio");
-                String descripcon = resultSet.getString("descripcion");
-                int rating = resultSet.getInt("rating");
-                String desarrollador = resultSet.getString("desarrollador");
-                boolean fullRemote = resultSet.getBoolean("fullRemote");
-                videojuegos.add(new Videojuego(nombre, precio, descripcon, rating, desarrollador, fullRemote));
+                videojuegos.add(DAOFactory.getInstance().getDaoVideojuegos().crearVideojuego(resultSet));
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
