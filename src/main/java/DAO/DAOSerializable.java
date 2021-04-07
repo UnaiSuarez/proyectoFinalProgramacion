@@ -36,4 +36,12 @@ public abstract class DAOSerializable {
         return object;
     }
 
+    public void borrar(){
+        File fichero = new File(file);
+        if (fichero.delete())
+            System.out.println("El fichero ha sido borrado satisfactoriamente");
+        else
+            System.out.println("El fichero no puede ser borrado");
+    }
+
 }

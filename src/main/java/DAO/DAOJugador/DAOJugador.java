@@ -15,6 +15,6 @@ public interface DAOJugador {
     public void actualizarSaldo(Jugador jugador, int saldo);
     public void comprarJuego(Jugador jugador, Videojuego videojuego);
     public List<Jugador> getAmigosFromjugador(Jugador jugador);
-    public void añadirAmigo(Jugador jugador, Jugador jugador2);
+    public void añadirAmigo(Jugador jugador, String jugador2);
     public List<String> buscarAmigo(String nombre, Jugador jugador);
 }

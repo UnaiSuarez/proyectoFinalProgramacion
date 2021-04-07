@@ -59,7 +59,7 @@ public class DAOJugadorSerializable extends DAOSerializable implements DAOJugado
     }
 
     @Override
-    public void añadirAmigo(Jugador jugador, Jugador jugador2) {
+    public void añadirAmigo(Jugador jugador, String jugador2) {
 
     }
 

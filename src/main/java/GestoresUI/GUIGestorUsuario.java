@@ -6,6 +6,7 @@ import Entidades.Jugador;
 import Funciones.FuncionCifrarContraseña;
 
 import javax.swing.*;
+import java.io.File;
 import java.util.List;
 
 /**
@@ -29,6 +30,12 @@ public class GUIGestorUsuario extends JFrame{
         setSize(500,500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(GestorUsuario);
+        File archivo = new File("usuarios.txt");
+        if (archivo.exists()){
+            DAOFactory.getInstance().getDaoSesion().iniciarSesion();
+            usuario.setText(DAOFactory.getInstance().getDaoSesion().iniciarSesion().getNombre());
+            contraseña.setText(funcionCifrarContraseña.decodificar(DAOFactory.getInstance().getDaoSesion().iniciarSesion().getContraseña()));
+        }
         acceder.addActionListener(e -> {
             doLogin();
         });

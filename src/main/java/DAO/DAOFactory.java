@@ -1,9 +1,10 @@
 package DAO;
 
 
+import DAO.DAOGuardarSesion.DAOSesion;
+import DAO.DAOGuardarSesion.DAOSesionSerializable;
 import DAO.DAOJugador.DAOJugador;
 import DAO.DAOJugador.DAOJugadorDatabase;
-import DAO.DAOJugador.DAOJugadorSerializable;
 import DAO.DAOVideojuegos.DAOVideojuegos;
 import DAO.DAOVideojuegos.DAOVideojuegosDatabase;
 
@@ -12,6 +13,7 @@ public class DAOFactory {
     private static DAOFactory daoFactory;
     private DAOJugador daoJugador;
     private DAOVideojuegos daoVideojuegos;
+    private DAOSesion daoSesion;
     private DAOFactory(){}
 
     public static DAOFactory getInstance(){
@@ -34,5 +36,12 @@ public class DAOFactory {
             daoVideojuegos = new DAOVideojuegosDatabase();
         }
         return daoVideojuegos;
+    }
+
+    public DAOSesion getDaoSesion(){
+        if (daoSesion == null){
+            daoSesion = new DAOSesionSerializable();
+        }
+        return daoSesion;
     }
 }

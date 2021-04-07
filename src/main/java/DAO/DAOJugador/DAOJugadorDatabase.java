@@ -117,11 +117,11 @@ public class DAOJugadorDatabase implements DAOJugador {
     }
 
     @Override
-    public void añadirAmigo(Jugador jugador, Jugador jugador2) {
+    public void añadirAmigo(Jugador jugador, String jugador2) {
         try {
             Statement statement = DBConnection.getIstance().createStatement();
-            statement.execute("insert into seguidores values('" + jugador.getNombre() + "'," + jugador2.getNombre() + "')");
-            statement.execute("insert into seguidores values('" + jugador2.getNombre() + "'," + jugador.getNombre() + "')");
+            statement.execute("insert into seguidores values('" + jugador.getNombre() + "','" + jugador2 + "')");
+            statement.execute("insert into seguidores values('" + jugador2 + "','" + jugador.getNombre() + "')");
         } catch (SQLException exception) {
             if (exception.getErrorCode() == 1062) {
                 System.err.println("Ya sois amigos");

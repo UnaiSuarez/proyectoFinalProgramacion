@@ -1,12 +1,21 @@
 package GestoresUI;
 
+
+
 import DAO.DAOFactory;
 import Entidades.Jugador;
 import Entidades.Videojuego;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 public class GUIGestorAplicacion extends JFrame {
@@ -34,8 +43,21 @@ public class GUIGestorAplicacion extends JFrame {
     private JTextField InpoutBuscarAmigos;
     private JPanel PanelMisAmigos;
     private JPanel PanelBuscarAmigos;
+    private JTextField InpoutBuscarJuegos;
+    private JButton BotonAñadirAmigo;
+    private JLabel imagen;
+    Image image = null;
+    URL url;
 
     public GUIGestorAplicacion(Jugador jugador){
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                close();
+            }
+        });
+
         this.jugador = jugador;
         PanelCompra.setVisible(false);
         PanelMisJuegos.setVisible(false);
@@ -44,7 +66,6 @@ public class GUIGestorAplicacion extends JFrame {
         PanelBuscarAmigos.setVisible(false);
         PanelMisAmigos.setVisible(false);
         setSize(500,500);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(PanelPrincipal);
         SaludoInput.setText(jugador.getNombre());
         SaldoInpout.setText("saldo: "+ jugador.getSaldo());
@@ -114,6 +135,54 @@ public class GUIGestorAplicacion extends JFrame {
             comprarJuego();
         });
 
+        BotonAñadirAmigo.addActionListener(e -> {
+            añadirAmigo();
+        });
+
+        ListaJuegosTodos.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cambiarImagen();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
+        InpoutBuscarJuegos.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                buscarJuegos();
+            }
+        });
+
         InpoutBuscarAmigos.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -131,6 +200,43 @@ public class GUIGestorAplicacion extends JFrame {
             }
         });
 
+
+
+    }
+
+    private void cambiarImagen(){
+        Videojuego videojuego = (Videojuego) ListaJuegosTodos.getSelectedValue();
+        if (videojuego.getNombre().equals("Cyberpunk 2077")){
+            try {
+                url = new URL("https://i.blogs.es/4030a0/cyberpunk/450_1000.jpeg");
+                image = ImageIO.read(url);
+                imagen.setIcon(new ImageIcon(image));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    private void close(){
+        if (JOptionPane.showConfirmDialog(rootPane, "¿Desea Guardar el usuario?", "Salir del sistema", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+            DAOFactory.getInstance().getDaoSesion().guardarSesion(jugador);
+            dispose();
+        }
+        else {
+            DAOFactory.getInstance().getDaoSesion().noGuardarSesion();
+            dispose();
+        }
+    }
+
+    private void añadirAmigo(){
+        DAOFactory.getInstance().getDaoJugador().añadirAmigo(jugador, (String) ListaBuscarAmigos.getSelectedValue());
+    }
+
+    private void buscarJuegos(){
+        String nombre = InpoutBuscarJuegos.getText();
+        System.out.println(DAOFactory.getInstance().getDaoVideojuegos().getBusquedaVideojuegos(nombre));
+        ListaJuegosTodos.setListData(DAOFactory.getInstance().getDaoVideojuegos().getBusquedaVideojuegos(nombre).toArray());
     }
 
     private void BuscarAmigos(){
@@ -146,7 +252,7 @@ public class GUIGestorAplicacion extends JFrame {
     }
 
     private void  comprarJuego(){
-        Videojuego videojuegoComprar = DAOFactory.getInstance().getDaoVideojuegos().getVideojuegos().get(ListaJuegosTodos.getSelectedIndex());
+        Videojuego videojuegoComprar = (Videojuego) ListaJuegosTodos.getSelectedValue();
         if (jugador.getSaldo() < videojuegoComprar.getPrecio()){
             JOptionPane.showMessageDialog(this,"Su saldo es insuficiente :(","ALERTA",JOptionPane.PLAIN_MESSAGE);
             System.out.println("saldo insuficiente");
@@ -163,7 +269,7 @@ public class GUIGestorAplicacion extends JFrame {
                         JOptionPane.showMessageDialog(this,"Ya tiene comprado este juego :(","ALERTA",JOptionPane.PLAIN_MESSAGE);
                         System.out.println("ya tienes este juego");
                     }else {
-                        if (i == videojuegos.size()){
+                        if (i == videojuegos.size() - 1){
                             DAOFactory.getInstance().getDaoJugador().comprarJuego(jugador,videojuegoComprar);
                             System.out.println("juego comprado");
                             jugador.compra(videojuegoComprar.getPrecio());

@@ -17,13 +17,7 @@ public class DAOVideojuegosDatabase implements DAOVideojuegos{
             Statement statement = DBConnection.getIstance().createStatement();
             ResultSet resultSet = statement.executeQuery("select * from videojuegos");
             while (resultSet.next()){
-                String nombre = resultSet.getString("nombre");
-                int precio = resultSet.getInt("precio");
-                String descripcon = resultSet.getString("descripcion");
-                int rating = resultSet.getInt("rating");
-                String desarrollador = resultSet.getString("desarrollador");
-                Boolean fullRemote = resultSet.getBoolean("fullRemote");
-                videojuegos.add(new Videojuego(nombre,precio,descripcon,rating,desarrollador,fullRemote));
+                videojuegos.add(crearJuego(resultSet));
             }
         }catch (SQLException throwables){
             throwables.printStackTrace();
@@ -39,5 +33,43 @@ public class DAOVideojuegosDatabase implements DAOVideojuegos{
     @Override
     public void delete(String nombre) {
 
+    }
+
+    @Override
+    public List<Videojuego> getBusquedaVideojuegos(String nombre) {
+        List<Videojuego> videojuegos = new ArrayList<>();
+        try {
+            Statement statement = DBConnection.getIstance().createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from videojuegos where nombre like'%"+nombre+"%'");
+            while (resultSet.next()) {
+                videojuegos.add(crearJuego(resultSet));
+            }
+        } catch (SQLException exception) {
+            if (exception.getErrorCode() == 1062) {
+                System.err.println("no hay juegos");
+            } else {
+                System.err.println(exception.getMessage());
+            }
+        }
+        return videojuegos;
+    }
+
+    public Videojuego crearJuego(ResultSet resultSet){
+        try {
+            String nombre = resultSet.getString("nombre");
+            int precio = resultSet.getInt("precio");
+            String descripcon = resultSet.getString("descripcion");
+            int rating = resultSet.getInt("rating");
+            String desarrollador = resultSet.getString("desarrollador");
+            Boolean fullRemote = resultSet.getBoolean("fullRemote");
+            return new Videojuego(nombre,precio,descripcon,rating,desarrollador,fullRemote);
+        }catch (SQLException exception) {
+            if (exception.getErrorCode() == 1062) {
+                System.err.println("no hay juegos");
+            } else {
+                System.err.println(exception.getMessage());
+            }
+        }
+        return null;
     }
 }
