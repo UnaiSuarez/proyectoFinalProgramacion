@@ -8,7 +8,7 @@ import Entidades.Videojuego;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DAOJugadorSerializable extends DAOSerializable implements DAOJugador {
+public abstract class DAOJugadorSerializable extends DAOSerializable implements DAOJugador {
     List<Jugador> jugadores;
 
     public DAOJugadorSerializable(){

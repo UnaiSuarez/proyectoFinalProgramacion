@@ -14,7 +14,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
@@ -46,6 +45,14 @@ public class GUIGestorAplicacion extends JFrame {
     private JTextField InpoutBuscarJuegos;
     private JButton BotonAñadirAmigo;
     private JLabel imagen;
+    private JLabel NombreLabel;
+    private JLabel DescripcionLabel;
+    private JLabel PrecioLabel;
+    private JLabel DesarrolladorLabel;
+    private JLabel RatingLabel;
+    private JPanel PanelMuestraInformacionJuego;
+    private JLabel LabelFecha;
+    private JButton cerrarSesionButton;
     Image image = null;
     URL url;
 
@@ -59,6 +66,7 @@ public class GUIGestorAplicacion extends JFrame {
         });
 
         this.jugador = jugador;
+        PanelMuestraInformacionJuego.setVisible(false);
         PanelCompra.setVisible(false);
         PanelMisJuegos.setVisible(false);
         PanelAjustes.setVisible(false);
@@ -70,6 +78,7 @@ public class GUIGestorAplicacion extends JFrame {
         SaludoInput.setText(jugador.getNombre());
         SaldoInpout.setText("saldo: "+ jugador.getSaldo());
         ComprarBoton.addActionListener(e -> {
+            PanelMuestraInformacionJuego.setVisible(false);
             PanelMisJuegos.setVisible(false);
             PanelAjustes.setVisible(false);
             PanelAmigos.setVisible(false);
@@ -80,6 +89,7 @@ public class GUIGestorAplicacion extends JFrame {
             setListaJuegosTodos();
         });
         MisJuegosBoton.addActionListener(e -> {
+            PanelMuestraInformacionJuego.setVisible(false);
             PanelCompra.setVisible(false);
             PanelAjustes.setVisible(false);
             PanelAmigos.setVisible(false);
@@ -91,6 +101,7 @@ public class GUIGestorAplicacion extends JFrame {
         });
 
         AjustesBoton.addActionListener(e -> {
+            PanelMuestraInformacionJuego.setVisible(false);
             PanelCompra.setVisible(false);
             PanelMisJuegos.setVisible(false);
             PanelAmigos.setVisible(false);
@@ -102,6 +113,7 @@ public class GUIGestorAplicacion extends JFrame {
         });
 
         BotonAmigos.addActionListener(e -> {
+            PanelMuestraInformacionJuego.setVisible(false);
             PanelCompra.setVisible(false);
             PanelMisJuegos.setVisible(false);
             PanelAjustes.setVisible(false);
@@ -113,6 +125,7 @@ public class GUIGestorAplicacion extends JFrame {
         });
 
         BotonMisAmigos.addActionListener(e -> {
+            PanelMuestraInformacionJuego.setVisible(false);
             setListaMisAmigos();
             PanelBuscarAmigos.setVisible(false);
             if (PanelMisAmigos.isVisible()){
@@ -121,6 +134,7 @@ public class GUIGestorAplicacion extends JFrame {
         });
 
         BotonBuscarAmigos.addActionListener(e -> {
+            PanelMuestraInformacionJuego.setVisible(false);
             PanelMisAmigos.setVisible(false);
             if (PanelBuscarAmigos.isVisible()){
                 PanelBuscarAmigos.setVisible(false);
@@ -139,15 +153,55 @@ public class GUIGestorAplicacion extends JFrame {
             añadirAmigo();
         });
 
-        ListaJuegosTodos.addMouseListener(new MouseListener() {
+        cerrarSesionButton.addActionListener(e -> {
+            dispose();
+            GUIGestorMenu guiGestorMenu = new GUIGestorMenu();
+            guiGestorMenu.setVisible(true);
+        });
+
+        ListaMisJuegos.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                cambiarImagen();
+
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
+                    PanelMuestraInformacionJuego.setVisible(true);
+                    Videojuego videojuego = (Videojuego) ListaMisJuegos.getSelectedValue();
+                    cambiarDescripcion(videojuego);
+                    LabelFecha.setText(String.valueOf(DAOFactory.getInstance().getDaoJugador().fechaAdquisicion(jugador,videojuego)));
 
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
+        ListaJuegosTodos.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                    PanelMuestraInformacionJuego.setVisible(true);
+                    Videojuego videojuego = (Videojuego) ListaJuegosTodos.getSelectedValue();
+                    LabelFecha.setText("");
+                    cambiarDescripcion(videojuego);
             }
 
             @Override
@@ -204,18 +258,22 @@ public class GUIGestorAplicacion extends JFrame {
 
     }
 
-    private void cambiarImagen(){
-        Videojuego videojuego = (Videojuego) ListaJuegosTodos.getSelectedValue();
-        if (videojuego.getNombre().equals("Cyberpunk 2077")){
+    private void cambiarDescripcion(Videojuego videojuego){
+        NombreLabel.setText(videojuego.getNombre());
+        DescripcionLabel.setText(videojuego.getDescripcion());
+        DesarrolladorLabel.setText(videojuego.getDesarrollador());
+        RatingLabel.setText(String.valueOf(videojuego.getRating()));
+        PrecioLabel.setText(String.valueOf(videojuego.getPrecio()));
             try {
-                url = new URL("https://i.blogs.es/4030a0/cyberpunk/450_1000.jpeg");
+                url = new URL(DAOFactory.getInstance().getDaoVideojuegos().imagenVideojugo(videojuego));
                 image = ImageIO.read(url);
-                imagen.setIcon(new ImageIcon(image));
+                Image img= new ImageIcon(url).getImage();
+                imagen.setIcon(new ImageIcon(img.getScaledInstance(200, 200, Image.SCALE_SMOOTH)));
+                imagen.setText("");
             } catch (IOException e) {
-                e.printStackTrace();
+                imagen.setIcon(null);
+                imagen.setText("no hay imagenes");
             }
-        }
-
     }
 
     private void close(){

@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DAOJugadorDatabase implements DAOJugador {
@@ -57,7 +58,7 @@ public class DAOJugadorDatabase implements DAOJugador {
     public void add(Jugador jugador) {
         try {
             Statement statement = DBConnection.getIstance().createStatement();
-            statement.execute("insert into jugadores values('" + jugador.getNombre() + "','" + jugador.getEmail() + "','" + jugador.getContraseña() + "')");
+            statement.execute("insert into jugadores values('" + jugador.getNombre() + "','" + jugador.getEmail() + "','" + jugador.getContraseña() + "',"+jugador.getSaldo()+")");
         } catch (SQLException exception) {
             if (exception.getErrorCode() == 1062) {
                 System.err.println("Ya existe un jugador con ese nombre");
@@ -149,5 +150,24 @@ public class DAOJugadorDatabase implements DAOJugador {
             }
         }
         return jugadores;
+    }
+
+    @Override
+    public Date fechaAdquisicion(Jugador jugador, Videojuego videojuego) {
+        Date fecha = null;
+        try {
+            Statement statement = DBConnection.getIstance().createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from juego_pertenece where videojuego = '"+videojuego.getNombre()+"' and jugador = '"+jugador.getNombre()+"'");
+            while (resultSet.next()) {
+                fecha = resultSet.getDate("fechaAdquisicion");
+            }
+        } catch (SQLException exception) {
+            if (exception.getErrorCode() == 1062) {
+                System.err.println("no hay fecha");
+            } else {
+                System.err.println(exception.getMessage());
+            }
+        }
+        return fecha;
     }
 }

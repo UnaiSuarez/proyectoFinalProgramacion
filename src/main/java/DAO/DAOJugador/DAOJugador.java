@@ -5,6 +5,7 @@ import Entidades.Jugador;
 import Entidades.Videojuego;
 
 import java.awt.image.VolatileImage;
+import java.util.Date;
 import java.util.List;
 
 public interface DAOJugador {
@@ -17,4 +18,5 @@ public interface DAOJugador {
     public List<Jugador> getAmigosFromjugador(Jugador jugador);
     public void añadirAmigo(Jugador jugador, String jugador2);
     public List<String> buscarAmigo(String nombre, Jugador jugador);
+    public Date fechaAdquisicion(Jugador jugador, Videojuego videojuego);
 }

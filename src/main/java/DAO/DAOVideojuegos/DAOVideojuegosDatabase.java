@@ -54,6 +54,25 @@ public class DAOVideojuegosDatabase implements DAOVideojuegos{
         return videojuegos;
     }
 
+    @Override
+    public String imagenVideojugo(Videojuego videojuego) {
+        String url = null;
+        try {
+            Statement statement = DBConnection.getIstance().createStatement();
+            ResultSet resultSet = statement.executeQuery("select valor from multimedia where videojuego =(select codigo from videojuegos where nombre ='"+ videojuego.getNombre() +"') and tipo = 'imagen'");
+            while (resultSet.next()){
+                url = resultSet.getString("valor");
+            }
+        } catch (SQLException exception) {
+            if (exception.getErrorCode() == 1062) {
+                System.err.println("no hay resultados");
+            } else {
+                System.err.println(exception.getMessage());
+            }
+        }
+        return url;
+    }
+
     public Videojuego crearJuego(ResultSet resultSet){
         try {
             String nombre = resultSet.getString("nombre");

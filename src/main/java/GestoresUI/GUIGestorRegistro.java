@@ -5,6 +5,8 @@ import Entidades.Jugador;
 import Funciones.FuncionCifrarContraseña;;
 
 import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,34 +23,123 @@ public class GUIGestorRegistro extends JFrame{
     private JLabel errorNombre;
     private JPanel gestorRegistro;
     private JButton Registrar;
+    private JTextField inpoutContraseña2;
+    private JLabel errorContraseña;
+    private boolean registrar1;
+    private boolean registrar2;
+    private boolean registrarContraseña;
 
     public GUIGestorRegistro(){
         setSize(500,500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(gestorRegistro);
+        Registrar.setEnabled(false);
         Registrar.addActionListener(e -> {
             doRegister();
         });
         generarContraseña.addActionListener(e -> {
             inputContraseña.setText(creaContraseña());
         });
+
+        inputNombre.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (comprobarNombre(inputNombre.getText())){
+                    registrar1 = true;
+                    validar(registrar1,registrar2,registrarContraseña);
+                }
+            }
+        });
+
+        inputCorreo.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (comprobarCorreo(inputCorreo.getText())){
+                    registrar2 = true;
+                    validar(registrar1,registrar2,registrarContraseña);
+                }
+            }
+        });
+
+        inpoutContraseña2.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (comprobarContraseña(inputContraseña.getText(),inpoutContraseña2.getText())){
+                    registrarContraseña = true;
+                    validar(registrar1,registrar2,registrarContraseña);
+                }
+
+            }
+        });
+
+        inputContraseña.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (comprobarContraseña(inputContraseña.getText(),inpoutContraseña2.getText())){
+                    registrarContraseña = true;
+                    validar(registrar1,registrar2,registrarContraseña);
+                }
+            }
+        });
+
+
     }
 
     private void doRegister(){
         String nombre = inputNombre.getText();
         String correo = inputCorreo.getText();
         String contraseña = funcionCifrarContraseña.codificaCesar(inputContraseña.getText());
-        if (comprobarCorreo(correo)&&comprobarNombre(nombre)){
-            Jugador jugador = new Jugador(nombre,correo,contraseña,0);
-            DAOFactory.getInstance().getDaoJugador().add(jugador);
-            dispose();
-            GUIGestorMenu guiGestorMenu = new GUIGestorMenu();
-            guiGestorMenu.setVisible(true);
+        if (comprobarCorreo(correo)){
+            errorCorreo.setText("");
+            if (comprobarNombre(nombre)){
+                errorNombre.setText("");
+                Jugador jugador = new Jugador(nombre,correo,contraseña,0);
+                DAOFactory.getInstance().getDaoJugador().add(jugador);
+                dispose();
+                GUIGestorMenu guiGestorMenu = new GUIGestorMenu();
+                guiGestorMenu.setVisible(true);
+            }
         }
-        else {
-            JOptionPane.showMessageDialog(this,"El nombre de usuario o Correo ya existe","REGISTRO",JOptionPane.PLAIN_MESSAGE);
-        }
-
     }
 
     private String creaContraseña(){
@@ -73,23 +164,72 @@ public class GUIGestorRegistro extends JFrame{
         return contraseña;
     }
 
-    public boolean comprobarCorreo(String correo){
+    private void validar(Boolean registrar1, Boolean registrar2, Boolean registrarContraseña){
+        if (registrar1 && registrar2 && registrarContraseña){
+            Registrar.setEnabled(true);
+        }
+    }
+
+    private boolean comprobarCorreo(String correo){
+        errorCorreo.setText("");
         jugadores = DAOFactory.getInstance().getDaoJugador().getJugador();
         for (int i = 0; i < jugadores.size(); i++) {
             if (jugadores.get(i).getEmail().equals(correo)){
+                errorCorreo.setText("Este Correo ya existe");
+                Registrar.setEnabled(false);
+                registrar2 = false;
+                return false;
+            }
+            else if (correo.equals("")){
+                errorCorreo.setText("El correo no puede estar vacio");
+                Registrar.setEnabled(false);
+                registrar2 = false;
                 return false;
             }
         }
         return true;
     }
 
-    public boolean comprobarNombre(String nombre){
+    private boolean comprobarNombre(String nombre){
+        errorNombre.setText("");
         jugadores = DAOFactory.getInstance().getDaoJugador().getJugador();
         for (int i = 0; i < jugadores.size(); i++) {
             if (jugadores.get(i).getNombre().equals(nombre)){
+                errorNombre.setText("Este Nombre ya existe");
+                Registrar.setEnabled(false);
+                registrar1 = false;
                 return false;
             }
+            else if (nombre.equals("")){
+                registrar1 = false;
+                errorNombre.setText("El nombre no puede estar vacio");
+                Registrar.setEnabled(false);
+            }
         }
+        return true;
+    }
+
+    private boolean comprobarContraseña(String contraseña1, String contraseña2){
+        errorContraseña.setText("");
+        if (contraseña1.equals("")) {
+            registrarContraseña = false;
+            errorContraseña.setText("Las contraseñas no pueden estar vacias");
+            Registrar.setEnabled(false);
+            return false;
+        }
+        else if (contraseña2.equals("")){
+            registrarContraseña = false;
+            errorContraseña.setText("Las contraseñas no pueden estar vacias");
+            Registrar.setEnabled(false);
+            return false;
+        }
+        else if (!contraseña1.equals(contraseña2)){
+            registrarContraseña = false;
+            Registrar.setEnabled(false);
+            errorContraseña.setText("Las contraseñas no coinciden");
+            return false;
+        }
+        errorContraseña.setText("");
         return true;
     }
 }
