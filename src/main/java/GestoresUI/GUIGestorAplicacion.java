@@ -5,6 +5,8 @@ import Entidades.Jugador;
 import Entidades.Videojuego;
 
 import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.List;
 
 public class GUIGestorAplicacion extends JFrame {
@@ -112,8 +114,31 @@ public class GUIGestorAplicacion extends JFrame {
             comprarJuego();
         });
 
+        InpoutBuscarAmigos.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                BuscarAmigos();
+            }
+        });
 
     }
+
+    private void BuscarAmigos(){
+        String nombre = InpoutBuscarAmigos.getText();
+        System.out.println(DAOFactory.getInstance().getDaoJugador().buscarAmigo(nombre,jugador));
+        setListaBuscarAmigos(nombre);
+    }
+
     private void añadirSaldo(){
             jugador.setSaldo(Integer.parseInt(AgregarSaldoInput.getText()));
             DAOFactory.getInstance().getDaoJugador().actualizarSaldo(jugador,Integer.parseInt(AgregarSaldoInput.getText()));
@@ -155,4 +180,5 @@ public class GUIGestorAplicacion extends JFrame {
     public void setListaJuegosTodos(){ListaJuegosTodos.setListData(DAOFactory.getInstance().getDaoVideojuegos().getVideojuegos().toArray());}
     public void setListaMisJuegos(){ListaMisJuegos.setListData(DAOFactory.getInstance().getDaoJugador().getVideojuegosFromjugador(jugador).toArray());}
     public void setListaMisAmigos(){ListaMisAmigos.setListData(DAOFactory.getInstance().getDaoJugador().getAmigosFromjugador(jugador).toArray());}
+    public void setListaBuscarAmigos(String nombre){ListaBuscarAmigos.setListData(DAOFactory.getInstance().getDaoJugador().buscarAmigo(nombre, jugador).toArray());}
 }

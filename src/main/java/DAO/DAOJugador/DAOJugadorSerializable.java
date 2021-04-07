@@ -62,4 +62,9 @@ public class DAOJugadorSerializable extends DAOSerializable implements DAOJugado
     public void añadirAmigo(Jugador jugador, Jugador jugador2) {
 
     }
+
+    @Override
+    public List<String> buscarAmigo(String nombre, Jugador jugador) {
+        return null;
+    }
 }

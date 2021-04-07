@@ -55,11 +55,6 @@ public class Jugador implements Serializable {
 
     @Override
     public String toString() {
-        return "Jugador{" +
-                "nombre='" + nombre + '\'' +
-                ", email='" + email + '\'' +
-                ", contraseña='" + contraseña + '\'' +
-                ", saldo='" + saldo + '\'' +
-                '}';
+        return "nombre: "+nombre;
     }
 }
