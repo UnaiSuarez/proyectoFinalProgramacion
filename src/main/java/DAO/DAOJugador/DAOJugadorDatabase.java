@@ -2,6 +2,7 @@ package DAO.DAOJugador;
 
 import DAO.DAOFactory;
 import Entidades.Jugador;
+import Entidades.Mensaje;
 import Entidades.Videojuego;
 import db.DBConnection;
 
@@ -163,5 +164,42 @@ public class DAOJugadorDatabase implements DAOJugador {
             }
         }
         return fecha;
+    }
+
+    @Override
+    public List<Mensaje> getmensajes(Jugador jugador) {
+        List<Mensaje> mensajes = new ArrayList<>();
+        try {
+            Statement statement = DBConnection.getIstance().createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from mensajes where receptor ='"+jugador.getNombre()+"'");
+            while (resultSet.next()){
+                String remitente = resultSet.getString("remitente");
+                String asunto = resultSet.getString("asunto");
+                String receptor = resultSet.getString("receptor");
+                String mensaje = resultSet.getString("mensaje");
+                mensajes.add(new Mensaje(remitente,receptor,asunto,mensaje));
+            }
+        }catch (SQLException exception) {
+            if (exception.getErrorCode() == 1062) {
+                System.err.println("no hay mensajes");
+            } else {
+                System.err.println(exception.getMessage());
+            }
+        }
+        return mensajes;
+    }
+
+    @Override
+    public void enviarMensaje(Mensaje mensaje) {
+        try {
+            Statement statement = DBConnection.getIstance().createStatement();
+            statement.execute("insert into mensajes (remitente,receptor,mensaje,asunto) VALUES('"+mensaje.getRemitente()+"','"+mensaje.getReceptor()+"','"+mensaje.getMensaje()+"','"+mensaje.getAsunto()+"')");
+        }catch (SQLException exception) {
+            if (exception.getErrorCode() == 1062) {
+                System.err.println("no es posible enviar");
+            } else {
+                System.err.println(exception.getMessage());
+            }
+        }
     }
 }

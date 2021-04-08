@@ -4,6 +4,7 @@ package GestoresUI;
 
 import DAO.DAOFactory;
 import Entidades.Jugador;
+import Entidades.Mensaje;
 import Entidades.Videojuego;
 
 import javax.imageio.ImageIO;
@@ -54,6 +55,21 @@ public class GUIGestorAplicacion extends JFrame {
     private JLabel LabelFecha;
     private JButton cerrarSesionButton;
     private JLabel LabelInformacion;
+    private JButton mensajesButton;
+    private JPanel PanelMensajes;
+    private JList listaMensajes;
+    private JLabel errorMensajes;
+    private JLabel LabelRemitente;
+    private JLabel LabelReceptor;
+    private JLabel LabelAsunto;
+    private JLabel LabelMensaje;
+    private JButton BorrarMensajeBoton;
+    private JPanel PanelInformacionMensajes;
+    private JButton BotonEnviarMensaje;
+    private JTextField InpoutAsunto;
+    private JTextField InpoutMensaje;
+    private JPanel PanelEnviarMensaje;
+    private JButton BotonEnviar;
     Image image = null;
     URL url;
 
@@ -67,6 +83,10 @@ public class GUIGestorAplicacion extends JFrame {
         });
 
         this.jugador = jugador;
+        PanelEnviarMensaje.setVisible(false);
+        BotonEnviarMensaje.setVisible(false);
+        PanelInformacionMensajes.setVisible(false);
+        PanelMensajes.setVisible(false);
         PanelMuestraInformacionJuego.setVisible(false);
         PanelCompra.setVisible(false);
         PanelMisJuegos.setVisible(false);
@@ -83,17 +103,32 @@ public class GUIGestorAplicacion extends JFrame {
             PanelMisJuegos.setVisible(false);
             PanelAjustes.setVisible(false);
             PanelAmigos.setVisible(false);
+            PanelMensajes.setVisible(false);
             if (PanelCompra.isVisible()){
                 PanelCompra.setVisible(false);
             }
             else PanelCompra.setVisible(true);
             setListaJuegosTodos();
         });
+        mensajesButton.addActionListener(e -> {
+            PanelMuestraInformacionJuego.setVisible(false);
+            PanelCompra.setVisible(false);
+            PanelAjustes.setVisible(false);
+            PanelAmigos.setVisible(false);
+            PanelMisJuegos.setVisible(false);
+            if (PanelMensajes.isVisible()){
+                PanelMensajes.setVisible(false);
+            }else {
+                PanelMensajes.setVisible(true);
+                setListaMensajes(jugador);
+            }
+        });
         MisJuegosBoton.addActionListener(e -> {
             PanelMuestraInformacionJuego.setVisible(false);
             PanelCompra.setVisible(false);
             PanelAjustes.setVisible(false);
             PanelAmigos.setVisible(false);
+            PanelMensajes.setVisible(false);
             if (PanelMisJuegos.isVisible()){
                 PanelMisJuegos.setVisible(false);
             }
@@ -106,6 +141,7 @@ public class GUIGestorAplicacion extends JFrame {
             PanelCompra.setVisible(false);
             PanelMisJuegos.setVisible(false);
             PanelAmigos.setVisible(false);
+            PanelMensajes.setVisible(false);
             if (PanelAjustes.isVisible()){
                 PanelAjustes.setVisible(false);
             }else {
@@ -113,18 +149,30 @@ public class GUIGestorAplicacion extends JFrame {
             }
         });
 
+        BotonEnviarMensaje.addActionListener(e -> {
+            if (PanelEnviarMensaje.isVisible()){
+                PanelEnviarMensaje.setVisible(false);
+            }else {
+                PanelEnviarMensaje.setVisible(true);
+            }
+        });
+
+        BotonEnviar.addActionListener(e -> {
+            enviarmensaje();
+        });
+
         BotonAmigos.addActionListener(e -> {
             PanelMuestraInformacionJuego.setVisible(false);
             PanelCompra.setVisible(false);
             PanelMisJuegos.setVisible(false);
             PanelAjustes.setVisible(false);
+            PanelMensajes.setVisible(false);
             if (PanelAmigos.isVisible()){
                 PanelAmigos.setVisible(false);
             }else {
                 PanelAmigos.setVisible(true);
             }
         });
-
         BotonMisAmigos.addActionListener(e -> {
             PanelMuestraInformacionJuego.setVisible(false);
             setListaMisAmigos();
@@ -159,6 +207,7 @@ public class GUIGestorAplicacion extends JFrame {
             GUIGestorMenu guiGestorMenu = new GUIGestorMenu();
             guiGestorMenu.setVisible(true);
         });
+
 
         ListaMisJuegos.addMouseListener(new MouseListener() {
             @Override
@@ -255,8 +304,77 @@ public class GUIGestorAplicacion extends JFrame {
             }
         });
 
+        ListaMisAmigos.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (BotonEnviarMensaje.isVisible()){
+                    BotonEnviarMensaje.setVisible(false);
+                }else BotonEnviarMensaje.setVisible(true);
+            }
 
+            @Override
+            public void mousePressed(MouseEvent e) {
 
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
+        listaMensajes.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (PanelInformacionMensajes.isVisible()){
+                    PanelInformacionMensajes.setVisible(false);
+                }else {
+                    PanelInformacionMensajes.setVisible(true);
+                    mostrarInformacionMensaje((Mensaje) listaMensajes.getSelectedValue());
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
+    }
+
+    private void enviarmensaje(){
+        String remitente = jugador.getNombre();
+        Jugador recpt = (Jugador) ListaMisAmigos.getSelectedValue();
+        String asunto = InpoutAsunto.getText();
+        String mensaje = InpoutMensaje.getText();
+        Mensaje mensaje1 = new Mensaje(remitente,recpt.getNombre(),asunto,mensaje);
+        DAOFactory.getInstance().getDaoJugador().enviarMensaje(mensaje1);
+        JOptionPane.showMessageDialog(this,"Mensaje enviado a: "+recpt,"ALERTA",JOptionPane.PLAIN_MESSAGE);
     }
 
     private void cambiarDescripcion(Videojuego videojuego){
@@ -340,10 +458,23 @@ public class GUIGestorAplicacion extends JFrame {
         }
     }
 
-
+    private void mostrarInformacionMensaje(Mensaje mensaje){
+        LabelRemitente.setText("Remitente: "+mensaje.getRemitente());
+        LabelReceptor.setText("Receptor: "+mensaje.getReceptor());
+        LabelAsunto.setText("Asunto: "+mensaje.getAsunto());
+        LabelMensaje.setText("Mensaje: "+mensaje.getMensaje());
+    }
 
     public void setListaJuegosTodos(){ListaJuegosTodos.setListData(DAOFactory.getInstance().getDaoVideojuegos().getVideojuegos().toArray());}
     public void setListaMisJuegos(){ListaMisJuegos.setListData(DAOFactory.getInstance().getDaoJugador().getVideojuegosFromjugador(jugador).toArray());}
     public void setListaMisAmigos(){ListaMisAmigos.setListData(DAOFactory.getInstance().getDaoJugador().getAmigosFromjugador(jugador).toArray());}
     public void setListaBuscarAmigos(String nombre){ListaBuscarAmigos.setListData(DAOFactory.getInstance().getDaoJugador().buscarAmigo(nombre, jugador).toArray());}
+    public void setListaMensajes(Jugador jugador){
+        List<Mensaje> mensajes = DAOFactory.getInstance().getDaoJugador().getmensajes(jugador);
+        if (mensajes.size()==0){
+            errorMensajes.setText("No hay mensajes");
+        }else {
+            listaMensajes.setListData(DAOFactory.getInstance().getDaoJugador().getmensajes(jugador).toArray());
+        }
+    }
 }
