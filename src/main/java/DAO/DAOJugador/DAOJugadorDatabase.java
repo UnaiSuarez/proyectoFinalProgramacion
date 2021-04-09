@@ -193,7 +193,7 @@ public class DAOJugadorDatabase implements DAOJugador {
     public void enviarMensaje(Mensaje mensaje) {
         try {
             Statement statement = DBConnection.getIstance().createStatement();
-            statement.execute("insert into mensajes (remitente,receptor,mensaje,asunto) VALUES('"+mensaje.getRemitente()+"','"+mensaje.getReceptor()+"','"+mensaje.getMensaje()+"','"+mensaje.getAsunto()+"')");
+            statement.execute("insert into mensajes (remitente,receptor,mensaje,asunto,leido,fecha) VALUES('"+mensaje.getRemitente()+"','"+mensaje.getReceptor()+"','"+mensaje.getMensaje()+"','"+mensaje.getAsunto()+"',false,now())");
         }catch (SQLException exception) {
             if (exception.getErrorCode() == 1062) {
                 System.err.println("no es posible enviar");
