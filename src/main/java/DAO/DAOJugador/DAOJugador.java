@@ -23,4 +23,6 @@ public interface DAOJugador {
     public Date fechaAdquisicion(Jugador jugador, Videojuego videojuego);
     public List<Mensaje> getmensajes(Jugador jugador);
     public void enviarMensaje(Mensaje mensaje);
+    public int numeroMensajes(Jugador jugador);
+    public void leerMensaje(Mensaje mensaje);
 }

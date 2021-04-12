@@ -202,4 +202,33 @@ public class DAOJugadorDatabase implements DAOJugador {
             }
         }
     }
+
+    @Override
+    public int numeroMensajes(Jugador jugador) {
+        int mensajes = 0;
+        try {
+            Statement statement = DBConnection.getIstance().createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from mensajes where receptor ='"+jugador.getNombre()+"' and leido = false");
+            while (resultSet.next()){
+                mensajes++;
+            }
+        }catch (SQLException exception) {
+            if (exception.getErrorCode() == 1062) {
+                System.err.println("no hay mensajes");
+            } else {
+                System.err.println(exception.getMessage());
+            }
+        }
+        return mensajes;
+    }
+
+    @Override
+    public void leerMensaje(Mensaje mensaje) {
+        try {
+            Statement statement = DBConnection.getIstance().createStatement();
+            statement.execute("update mensajes set leido = true where mensaje ='"+mensaje.getMensaje()+"' and asunto = '"+mensaje.getAsunto()+"'");
+        }catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 }

@@ -70,6 +70,7 @@ public class GUIGestorAplicacion extends JFrame {
     private JTextField InpoutMensaje;
     private JPanel PanelEnviarMensaje;
     private JButton BotonEnviar;
+    private JLabel LabelNumeroMensajes;
     Image image = null;
     URL url;
 
@@ -98,6 +99,7 @@ public class GUIGestorAplicacion extends JFrame {
         add(PanelPrincipal);
         SaludoInput.setText(jugador.getNombre());
         SaldoInpout.setText("saldo: "+ jugador.getSaldo());
+        LabelNumeroMensajes.setText("tienes: "+DAOFactory.getInstance().getDaoJugador().numeroMensajes(jugador)+" mensajes sin leer");
         ComprarBoton.addActionListener(e -> {
             PanelMuestraInformacionJuego.setVisible(false);
             PanelMisJuegos.setVisible(false);
@@ -307,9 +309,7 @@ public class GUIGestorAplicacion extends JFrame {
         ListaMisAmigos.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (BotonEnviarMensaje.isVisible()){
-                    BotonEnviarMensaje.setVisible(false);
-                }else BotonEnviarMensaje.setVisible(true);
+                 BotonEnviarMensaje.setVisible(true);
             }
 
             @Override
@@ -341,6 +341,7 @@ public class GUIGestorAplicacion extends JFrame {
                 }else {
                     PanelInformacionMensajes.setVisible(true);
                     mostrarInformacionMensaje((Mensaje) listaMensajes.getSelectedValue());
+                    DAOFactory.getInstance().getDaoJugador().leerMensaje((Mensaje) listaMensajes.getSelectedValue());
                 }
             }
 
