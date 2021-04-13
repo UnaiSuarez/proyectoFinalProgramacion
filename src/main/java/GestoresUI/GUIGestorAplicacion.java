@@ -80,6 +80,8 @@ public class GUIGestorAplicacion extends JFrame {
             @Override
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 close();
+                GUIGestorMenu guiGestorMenu = new GUIGestorMenu();
+                guiGestorMenu.setVisible(true);
             }
         });
 
