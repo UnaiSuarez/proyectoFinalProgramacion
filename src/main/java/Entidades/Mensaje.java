@@ -1,12 +1,14 @@
 package Entidades;
 
 public class Mensaje {
+    private int id;
     private String remitente;
     private String asunto;
     private String receptor;
     private String mensaje;
 
-    public Mensaje(String remitente, String receptor, String asunto, String mensaje) {
+    public Mensaje(int id, String remitente, String receptor, String asunto, String mensaje) {
+        this.id = id;
         this.remitente = remitente;
         this.asunto = asunto;
         this.receptor = receptor;
@@ -34,5 +36,7 @@ public class Mensaje {
         return mensaje;
     }
 
-
+    public int getId() {
+        return id;
+    }
 }

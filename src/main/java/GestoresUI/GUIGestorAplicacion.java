@@ -95,13 +95,14 @@ public class GUIGestorAplicacion extends JFrame {
         PanelAmigos.setVisible(false);
         PanelBuscarAmigos.setVisible(false);
         PanelMisAmigos.setVisible(false);
-        setSize(500,500);
+        setSize(5000,5000);
         add(PanelPrincipal);
         SaludoInput.setText(jugador.getNombre());
         SaldoInpout.setText("saldo: "+ jugador.getSaldo());
         LabelNumeroMensajes.setText("tienes: "+DAOFactory.getInstance().getDaoJugador().numeroMensajes(jugador)+" mensajes sin leer");
         ComprarBoton.addActionListener(e -> {
             PanelMuestraInformacionJuego.setVisible(false);
+            PanelInformacionMensajes.setVisible(false);
             PanelMisJuegos.setVisible(false);
             PanelAjustes.setVisible(false);
             PanelAmigos.setVisible(false);
@@ -114,6 +115,7 @@ public class GUIGestorAplicacion extends JFrame {
         });
         mensajesButton.addActionListener(e -> {
             PanelMuestraInformacionJuego.setVisible(false);
+            PanelInformacionMensajes.setVisible(false);
             PanelCompra.setVisible(false);
             PanelAjustes.setVisible(false);
             PanelAmigos.setVisible(false);
@@ -127,6 +129,7 @@ public class GUIGestorAplicacion extends JFrame {
         });
         MisJuegosBoton.addActionListener(e -> {
             PanelMuestraInformacionJuego.setVisible(false);
+            PanelInformacionMensajes.setVisible(false);
             PanelCompra.setVisible(false);
             PanelAjustes.setVisible(false);
             PanelAmigos.setVisible(false);
@@ -140,6 +143,7 @@ public class GUIGestorAplicacion extends JFrame {
 
         AjustesBoton.addActionListener(e -> {
             PanelMuestraInformacionJuego.setVisible(false);
+            PanelInformacionMensajes.setVisible(false);
             PanelCompra.setVisible(false);
             PanelMisJuegos.setVisible(false);
             PanelAmigos.setVisible(false);
@@ -165,6 +169,7 @@ public class GUIGestorAplicacion extends JFrame {
 
         BotonAmigos.addActionListener(e -> {
             PanelMuestraInformacionJuego.setVisible(false);
+            PanelInformacionMensajes.setVisible(false);
             PanelCompra.setVisible(false);
             PanelMisJuegos.setVisible(false);
             PanelAjustes.setVisible(false);
@@ -333,6 +338,11 @@ public class GUIGestorAplicacion extends JFrame {
             }
         });
 
+        BorrarMensajeBoton.addActionListener(e -> {
+            DAOFactory.getInstance().getDaoJugador().borrarMensaje((Mensaje) listaMensajes.getSelectedValue());
+            setListaMensajes(jugador);
+        });
+
         listaMensajes.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -342,6 +352,7 @@ public class GUIGestorAplicacion extends JFrame {
                     PanelInformacionMensajes.setVisible(true);
                     mostrarInformacionMensaje((Mensaje) listaMensajes.getSelectedValue());
                     DAOFactory.getInstance().getDaoJugador().leerMensaje((Mensaje) listaMensajes.getSelectedValue());
+                    LabelNumeroMensajes.setText("tienes: "+DAOFactory.getInstance().getDaoJugador().numeroMensajes(jugador)+" mensajes sin leer");
                 }
             }
 
@@ -373,7 +384,7 @@ public class GUIGestorAplicacion extends JFrame {
         Jugador recpt = (Jugador) ListaMisAmigos.getSelectedValue();
         String asunto = InpoutAsunto.getText();
         String mensaje = InpoutMensaje.getText();
-        Mensaje mensaje1 = new Mensaje(remitente,recpt.getNombre(),asunto,mensaje);
+        Mensaje mensaje1 = new Mensaje(0,remitente,recpt.getNombre(),asunto,mensaje);
         DAOFactory.getInstance().getDaoJugador().enviarMensaje(mensaje1);
         JOptionPane.showMessageDialog(this,"Mensaje enviado a: "+recpt,"ALERTA",JOptionPane.PLAIN_MESSAGE);
     }

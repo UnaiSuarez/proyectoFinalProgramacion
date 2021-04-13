@@ -25,4 +25,5 @@ public interface DAOJugador {
     public void enviarMensaje(Mensaje mensaje);
     public int numeroMensajes(Jugador jugador);
     public void leerMensaje(Mensaje mensaje);
+    public void borrarMensaje(Mensaje mensaje);
 }

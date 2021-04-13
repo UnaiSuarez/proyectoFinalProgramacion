@@ -173,11 +173,12 @@ public class DAOJugadorDatabase implements DAOJugador {
             Statement statement = DBConnection.getIstance().createStatement();
             ResultSet resultSet = statement.executeQuery("select * from mensajes where receptor ='"+jugador.getNombre()+"'");
             while (resultSet.next()){
+                int id = resultSet.getInt("id");
                 String remitente = resultSet.getString("remitente");
                 String asunto = resultSet.getString("asunto");
                 String receptor = resultSet.getString("receptor");
                 String mensaje = resultSet.getString("mensaje");
-                mensajes.add(new Mensaje(remitente,receptor,asunto,mensaje));
+                mensajes.add(new Mensaje(id,remitente,receptor,asunto,mensaje));
             }
         }catch (SQLException exception) {
             if (exception.getErrorCode() == 1062) {
@@ -226,7 +227,17 @@ public class DAOJugadorDatabase implements DAOJugador {
     public void leerMensaje(Mensaje mensaje) {
         try {
             Statement statement = DBConnection.getIstance().createStatement();
-            statement.execute("update mensajes set leido = true where mensaje ='"+mensaje.getMensaje()+"' and asunto = '"+mensaje.getAsunto()+"'");
+            statement.execute("update mensajes set leido = true where id ="+mensaje.getId());
+        }catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    @Override
+    public void borrarMensaje(Mensaje mensaje) {
+        try {
+            Statement statement = DBConnection.getIstance().createStatement();
+            statement.execute("delete from mensajes where id ="+mensaje.getId());
         }catch (SQLException throwables) {
             throwables.printStackTrace();
         }
