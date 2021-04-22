@@ -71,6 +71,8 @@ public class GUIGestorAplicacion extends JFrame {
     private JPanel PanelEnviarMensaje;
     private JButton BotonEnviar;
     private JLabel LabelNumeroMensajes;
+    private JPanel PanelDesarrollador;
+    private JList ListaDesarrolladores;
     Image image = null;
     URL url;
 

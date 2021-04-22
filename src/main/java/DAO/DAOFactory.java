@@ -1,6 +1,8 @@
 package DAO;
 
 
+import DAO.DAODesarrollador.DAODesarrollador;
+import DAO.DAODesarrollador.DAODesarrolladorORM;
 import DAO.DAOGuardarSesion.DAOSesion;
 import DAO.DAOGuardarSesion.DAOSesionSerializable;
 import DAO.DAOJugador.DAOJugador;
@@ -8,12 +10,15 @@ import DAO.DAOJugador.DAOJugadorDatabase;
 import DAO.DAOVideojuegos.DAOVideojuegos;
 import DAO.DAOVideojuegos.DAOVideojuegosDatabase;
 
+import java.sql.SQLException;
+
 public class DAOFactory {
 
     private static DAOFactory daoFactory;
     private DAOJugador daoJugador;
     private DAOVideojuegos daoVideojuegos;
     private DAOSesion daoSesion;
+    private DAODesarrollador daoDesarrollador;
     private DAOFactory(){}
 
     public static DAOFactory getInstance(){
@@ -43,5 +48,12 @@ public class DAOFactory {
             daoSesion = new DAOSesionSerializable();
         }
         return daoSesion;
+    }
+
+    public DAODesarrollador getDaoDesarrollador(){
+        if (daoDesarrollador == null){
+            daoDesarrollador = new DAODesarrolladorORM();
+        }
+        return daoDesarrollador;
     }
 }

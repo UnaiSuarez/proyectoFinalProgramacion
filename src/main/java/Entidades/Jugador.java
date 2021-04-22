@@ -1,13 +1,20 @@
 package Entidades;
 
+
 import DAO.DAOFactory;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import java.io.Serializable;
-
+@DatabaseTable(tableName = "sesionGuardada")
 public class Jugador implements Serializable {
+    @DatabaseField(id = true)
     private String nombre;
+    @DatabaseField
     private String email;
+    @DatabaseField
     private String contraseña;
+    @DatabaseField
     private int saldo;
 
     public Jugador(String nombre, String email, String contraseña, int saldo) {
