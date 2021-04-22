@@ -52,7 +52,11 @@ public class DAOFactory {
 
     public DAODesarrollador getDaoDesarrollador(){
         if (daoDesarrollador == null){
-            daoDesarrollador = new DAODesarrolladorORM();
+            try {
+                daoDesarrollador = new DAODesarrolladorORM();
+            }catch (SQLException throwables){
+
+            }
         }
         return daoDesarrollador;
     }
