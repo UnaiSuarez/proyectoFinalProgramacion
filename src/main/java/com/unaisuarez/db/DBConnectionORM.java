@@ -15,7 +15,7 @@ public class DBConnectionORM {
         String password = "programador";
         String host = "80.34.34.150";
         String port = "33068";
-        String database = "videojuegos";
+        String database = "videojuegos2";
         connection = new JdbcConnectionSource("jdbc:mysql://"+ host +":"+port+"/"+database+"?"+"user="+user+"&password="+password,user,password);
     }
 
