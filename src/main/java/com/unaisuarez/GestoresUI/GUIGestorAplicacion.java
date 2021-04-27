@@ -11,10 +11,7 @@ import com.unaisuarez.Entidades.Videojuego;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -88,6 +85,15 @@ public class GUIGestorAplicacion extends JFrame {
                 guiGestorMenu.setVisible(true);
             }
         });
+
+        Timer timer = new Timer (100, new ActionListener ()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                LabelNumeroMensajes.setText(String.valueOf(DAOFactory.getInstance().getDaoJugador().numeroMensajes(jugador)));
+            }
+        });
+        timer.start();
 
         this.jugador = jugador;
         PanelEnviarMensaje.setVisible(false);
