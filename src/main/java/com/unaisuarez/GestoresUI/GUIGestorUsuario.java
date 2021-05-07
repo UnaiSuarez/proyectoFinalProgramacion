@@ -30,6 +30,8 @@ public class GUIGestorUsuario extends JFrame{
         setSize(500,500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(GestorUsuario);
+        GestorUsuario.setLayout(null);
+
         File archivo = new File("usuarios.txt");
         if (archivo.exists()){
             DAOFactory.getInstance().getDaoSesion().iniciarSesion();

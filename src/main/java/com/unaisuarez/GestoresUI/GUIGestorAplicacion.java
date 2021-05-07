@@ -86,6 +86,8 @@ public class GUIGestorAplicacion extends JFrame {
             }
         });
 
+
+
         Timer timer = new Timer (100, new ActionListener ()
         {
             public void actionPerformed(ActionEvent e)
@@ -501,6 +503,10 @@ public class GUIGestorAplicacion extends JFrame {
                 }
             }
         }
+    }
+
+    private void muestraAlertaMensaje(){
+        JOptionPane.showMessageDialog(this,"Su saldo es insuficiente :(","ALERTA",JOptionPane.PLAIN_MESSAGE);
     }
 
     private void mostrarInformacionMensaje(Mensaje mensaje){
