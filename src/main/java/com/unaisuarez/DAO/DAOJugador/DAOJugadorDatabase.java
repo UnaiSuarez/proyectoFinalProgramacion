@@ -6,11 +6,11 @@ import com.unaisuarez.Entidades.Mensaje;
 import com.unaisuarez.Entidades.Videojuego;
 import com.unaisuarez.db.DBConnection;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class DAOJugadorDatabase implements DAOJugador {
@@ -239,6 +239,16 @@ public class DAOJugadorDatabase implements DAOJugador {
             Statement statement = DBConnection.getIstance().createStatement();
             statement.execute("delete from mensajes where id ="+mensaje.getId());
         }catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    @Override
+    public void clear() {
+        try {
+            Statement statement = DBConnection.getIstance().createStatement();
+            statement.execute("delete from jugadores");
+        }catch (SQLException throwables){
             throwables.printStackTrace();
         }
     }

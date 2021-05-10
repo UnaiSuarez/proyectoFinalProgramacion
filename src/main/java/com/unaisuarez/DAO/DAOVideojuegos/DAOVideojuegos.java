@@ -13,4 +13,5 @@ public interface DAOVideojuegos {
     public  List<Videojuego> getBusquedaVideojuegos(String nombre);
     public String imagenVideojugo(Videojuego videojuego);
     public Videojuego crearVideojuego(ResultSet resultSet);
+    public void clear();
 }

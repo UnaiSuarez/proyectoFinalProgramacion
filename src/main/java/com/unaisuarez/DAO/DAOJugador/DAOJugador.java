@@ -5,7 +5,7 @@ import com.unaisuarez.Entidades.Jugador;
 import com.unaisuarez.Entidades.Mensaje;
 import com.unaisuarez.Entidades.Videojuego;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 public interface DAOJugador {
@@ -24,4 +24,5 @@ public interface DAOJugador {
     public int numeroMensajes(Jugador jugador);
     public void leerMensaje(Mensaje mensaje);
     public void borrarMensaje(Mensaje mensaje);
+    public void clear();
 }

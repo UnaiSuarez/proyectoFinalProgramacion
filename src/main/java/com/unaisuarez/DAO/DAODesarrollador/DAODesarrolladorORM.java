@@ -25,6 +25,15 @@ public class DAODesarrolladorORM implements DAODesarrollador {
     }
 
     @Override
+    public void add(Desarrollador desarrollador) {
+        try{
+            daoDesarrolladorORM.create(desarrollador);
+        }catch (SQLException throwables){
+
+        }
+    }
+
+    @Override
     public List<Desarrollador> get() {
         try {
             return daoDesarrolladorORM.queryForAll();
@@ -32,4 +41,13 @@ public class DAODesarrolladorORM implements DAODesarrollador {
             return null;
         }
     }
+
+    @Override
+    public void clear() {
+        try {
+             daoDesarrolladorORM.delete(daoDesarrolladorORM.queryForAll());
+        }catch (SQLException throwables){
+
+        }
+      }
 }

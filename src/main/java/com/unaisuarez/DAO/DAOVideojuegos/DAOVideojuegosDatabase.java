@@ -27,12 +27,24 @@ public class DAOVideojuegosDatabase implements DAOVideojuegos{
 
     @Override
     public void add(Videojuego videojuego) {
-
+        try {
+            Statement statement = DBConnection.getIstance().createStatement();
+            statement.execute("insert into videojuegos(nombre,precio,descripcio,rating,desarrollador,fullremote) " +
+                    "values ('"+videojuego.getNombre()+"','"+videojuego.getPrecio()+"','"+videojuego.getDescripcion()+"'," +
+                    "'"+videojuego.getRating()+"','"+videojuego.getDesarrollador()+"','"+videojuego.isFullRemote()+"')");
+        }catch (SQLException throwables){
+            System.out.println("error al agregar el videojuego");
+        }
     }
 
     @Override
     public void delete(String nombre) {
-
+        try {
+            Statement statement = DBConnection.getIstance().createStatement();
+            statement.execute("delete from videojuegos where nombre = '"+nombre+"'");
+        }catch (SQLException throwables){
+            System.out.println("error al eliminar el videojuego");
+        }
     }
 
     @Override
@@ -105,6 +117,16 @@ public class DAOVideojuegosDatabase implements DAOVideojuegos{
             }
         }
         return null;
+    }
+
+    @Override
+    public void clear() {
+        try {
+            Statement statement = DBConnection.getIstance().createStatement();
+            statement.execute("delete from videojuegos");
+        }catch (SQLException throwables){
+            System.out.println("error al eliminar el videojuego");
+        }
     }
 
 }
