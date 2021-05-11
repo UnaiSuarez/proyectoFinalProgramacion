@@ -19,6 +19,7 @@ class DAOJugadorDatabaseTest {
     @BeforeAll
     @AfterAll
     static void clearDatabase(){
+        DAOFactory.getInstance().getDaoVideojuegos().clear();
         DAOFactory.getInstance().getDaoJugador().clear();
     }
 
@@ -38,7 +39,8 @@ class DAOJugadorDatabaseTest {
     @Test
     void getVideojuegosFromjugador() {
         Jugador jugador = new Jugador("unai","unai64535@gmail.com","unai",100000);
-        Videojuego videojuego = DAOFactory.getInstance().getDaoVideojuegos().getVideojuegos().get(1);
+        Videojuego videojuego = new Videojuego("cod",50,"cod",5,null,true);
+        DAOFactory.getInstance().getDaoVideojuegos().add(videojuego);
         DAOFactory.getInstance().getDaoJugador().add(jugador);
         DAOFactory.getInstance().getDaoJugador().comprarJuego(jugador,videojuego);
         List<Videojuego> videojuegos = DAOFactory.getInstance().getDaoJugador().getVideojuegosFromjugador(jugador);
@@ -73,8 +75,9 @@ class DAOJugadorDatabaseTest {
     @Test
     void fechaAdquisicion() {
         Jugador jugador = new Jugador("unai","unai64535@gmail.com","unai",100000);
-        Videojuego videojuego = DAOFactory.getInstance().getDaoVideojuegos().getVideojuegos().get(1);
+        Videojuego videojuego = new Videojuego("cod",50,"cod",5,"activision",true);
         DAOFactory.getInstance().getDaoJugador().add(jugador);
+        DAOFactory.getInstance().getDaoVideojuegos().add(videojuego);
         DAOFactory.getInstance().getDaoJugador().comprarJuego(jugador,videojuego);
         Date fecha = DAOFactory.getInstance().getDaoJugador().fechaAdquisicion(jugador,videojuego);
         LocalDate fechaActual = LocalDate.now();
