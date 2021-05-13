@@ -28,6 +28,7 @@ class DAOJugadorDatabaseTest {
 
     @Test
     void getJugador() {
+        clearDatabase();
         Jugador jugador = new Jugador("unai","unai64535@gmail.com","unai",0);
         DAOFactory.getInstance().getDaoJugador().add(jugador);
         List<Jugador> jugadores = DAOFactory.getInstance().getDaoJugador().getJugador();
@@ -38,6 +39,7 @@ class DAOJugadorDatabaseTest {
 
     @Test
     void getVideojuegosFromjugador() {
+        clearDatabase();
         Jugador jugador = new Jugador("unai","unai64535@gmail.com","unai",100000);
         Videojuego videojuego = new Videojuego("cod",50,"cod",5,null,true);
         DAOFactory.getInstance().getDaoVideojuegos().add(videojuego);
@@ -51,6 +53,7 @@ class DAOJugadorDatabaseTest {
 
     @Test
     void actualizarSaldo() {
+        clearDatabase();
         Jugador jugador = new Jugador("unai","unai64535@gmail.com","unai",0);
         DAOFactory.getInstance().getDaoJugador().add(jugador);
         DAOFactory.getInstance().getDaoJugador().actualizarSaldo(jugador,1000);
@@ -62,6 +65,7 @@ class DAOJugadorDatabaseTest {
 
     @Test
     void getAmigosFromjugador() {
+        clearDatabase();
         Jugador jugador = new Jugador("unai","unai64535@gmail.com","unai",0);
         Jugador jugador2 = new Jugador("alejandra","alejandra@gmail.com","alejandra",0);
         DAOFactory.getInstance().getDaoJugador().add(jugador);
@@ -74,6 +78,7 @@ class DAOJugadorDatabaseTest {
 
     @Test
     void fechaAdquisicion() {
+        clearDatabase();
         Jugador jugador = new Jugador("unai","unai64535@gmail.com","unai",100000);
         Videojuego videojuego = new Videojuego("cod",50,"cod",5,"activision",true);
         DAOFactory.getInstance().getDaoJugador().add(jugador);
@@ -88,6 +93,7 @@ class DAOJugadorDatabaseTest {
 
     @Test
     void getmensajes() {
+        clearDatabase();
         Jugador jugador = new Jugador("unai","unai64535@gmail.com","unai",0);
         Jugador jugador2 = new Jugador("alejandra","alejandra@gmail.com","alejandra",0);
         DAOFactory.getInstance().getDaoJugador().add(jugador);
@@ -100,6 +106,7 @@ class DAOJugadorDatabaseTest {
 
     @Test
     void numeroMensajes() {
+        clearDatabase();
         Jugador jugador = new Jugador("unai","unai64535@gmail.com","unai",0);
         Jugador jugador2 = new Jugador("alejandra","alejandra@gmail.com","alejandra",0);
         DAOFactory.getInstance().getDaoJugador().add(jugador);

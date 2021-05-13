@@ -29,9 +29,10 @@ public class DAOVideojuegosDatabase implements DAOVideojuegos{
     public void add(Videojuego videojuego) {
         try {
             Statement statement = DBConnection.getIstance().createStatement();
-            statement.execute("insert into videojuegos(nombre,precio,descripcion,rating,desarrollador,fullRemote) " +
+            String sql = "insert into videojuegos(nombre,precio,descripcion,rating,desarrollador,fullRemote) " +
                     "values ('"+videojuego.getNombre()+"',"+videojuego.getPrecio()+",'"+videojuego.getDescripcion()+"'," +
-                    ""+videojuego.getRating()+",null,"+videojuego.isFullRemote()+")");
+                    ""+videojuego.getRating()+",null,"+videojuego.isFullRemote()+")";
+            statement.execute(sql);
         }catch (SQLException throwables){
             System.out.println("error al agregar el videojuego");
 

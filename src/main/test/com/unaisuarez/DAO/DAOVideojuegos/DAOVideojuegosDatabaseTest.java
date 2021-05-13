@@ -23,6 +23,7 @@ class DAOVideojuegosDatabaseTest {
 
     @Test
     void getVideojuegos() {
+        clearDatabase();
         Videojuego videojuego = new Videojuego("cod",50,"cod",5,null,true);
         DAOFactory.getInstance().getDaoVideojuegos().add(videojuego);
         List<Videojuego> videojuegos = DAOFactory.getInstance().getDaoVideojuegos().getVideojuegos();
@@ -32,6 +33,7 @@ class DAOVideojuegosDatabaseTest {
 
     @Test
     void getBusquedaVideojuegos() {
+        clearDatabase();
         Videojuego videojuego = new Videojuego("cod",50,"cod",5,"activision",true);
         DAOFactory.getInstance().getDaoVideojuegos().add(videojuego);
         List<Videojuego> videojuegos= DAOFactory.getInstance().getDaoVideojuegos().getBusquedaVideojuegos(videojuego.getNombre());

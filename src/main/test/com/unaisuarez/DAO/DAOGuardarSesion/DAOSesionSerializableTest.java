@@ -9,12 +9,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DAOSesionSerializableTest {
-    @BeforeAll
-    @AfterAll
-    static void clearDatabase(){
-        DAOFactory.getInstance().getDaoSesion().noGuardarSesion();
-    }
-
 
     @Test
     void noGuardarSesion() {
